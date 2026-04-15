@@ -1,5 +1,5 @@
 /**
- * Stellar Payment Dashboard - Main Page
+ * Stellar farmer's tipping jar Dashboard - Main Page
  * 
  * This is the main page that brings all components together.
  * All blockchain logic is in lib/stellar-helper.ts (DO NOT MODIFY)
@@ -128,7 +128,7 @@ export default function Home() {
                 <div className="text-3xl mb-3">💰</div>
                 <h3 className="text-white font-semibold mb-2">Low Fees</h3>
                 <p className="text-white/60 text-sm">
-                  Transaction fees are just 0.00001 XLM (~$0.000001)
+                  Transaction fees are just  0.00001 XLM (~$0.000001)
                 </p>
               </div>
 
@@ -194,10 +194,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center text-white/40 text-sm">
             <p className="mb-2">
-              Built with ❤️ using Stellar SDK | Running on Testnet
+              Built by Dan
             </p>
             <p className="text-xs">
-              ⚠️ This is a testnet application. Do not use real funds.
+              ⚠️ This is a testnet application. Do not use real funds while sending to peer farmers.
             </p>
           </div>
         </div>
