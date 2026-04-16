@@ -170,7 +170,7 @@ export function BalanceChart({ publicKey }: { publicKey: string }) {
             />
             <Tooltip 
               contentStyle={{ backgroundColor: '#1a051a', border: '1px solid #5c1a5c', borderRadius: '8px', color: '#fdf2ff' }}
-              formatter={(value: ValueType) => [`${Number(value ?? 0).toFixed(4)} XLM`, 'Balance']}
+              formatter={(value: number | string) => [`${Number(value ?? 0).toFixed(4)} XLM`, 'Balance']}
             />
             <Line 
               type="monotone" 
