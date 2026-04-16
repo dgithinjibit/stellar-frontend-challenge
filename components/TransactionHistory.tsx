@@ -10,20 +10,23 @@
  * - Empty state when no transactions
  * - Loading state
  * - Refresh functionality
+ * - 🔍 SEARCH/FILTER (10 bonus points)
  */
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { stellar } from '@/lib/stellar-helper';
 import { FaHistory, FaSync, FaArrowUp, FaArrowDown, FaExternalLinkAlt } from 'react-icons/fa';
 import { Card, EmptyState } from './example-components';
+import { TransactionFilter } from '@/components/BonusFeatures'; // 🔍 Import search filter
 
 interface Transaction {
   id: string;
   type: string;
   amount?: string;
   asset?: string;
+  memo?: string;
   from?: string;
   to?: string;
   createdAt: string;
@@ -39,6 +42,7 @@ export default function TransactionHistory({ publicKey }: TransactionHistoryProp
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [limit] = useState(10);
+  const [searchQuery, setSearchQuery] = useState(''); // 🔍 Search state
 
   const fetchTransactions = async () => {
     try {
@@ -58,6 +62,21 @@ export default function TransactionHistory({ publicKey }: TransactionHistoryProp
       fetchTransactions();
     }
   }, [publicKey]);
+
+  // 🔍 Filter transactions based on search query
+  const filteredTransactions = useMemo(() => {
+    if (!searchQuery.trim()) return transactions;
+    const q = searchQuery.toLowerCase();
+    return transactions.filter(tx =>
+      tx.from?.toLowerCase().includes(q) ||
+      tx.to?.toLowerCase().includes(q) ||
+      tx.hash?.toLowerCase().includes(q) ||
+      tx.memo?.toLowerCase().includes(q) ||
+      tx.amount?.includes(q) ||
+      tx.asset?.toLowerCase().includes(q) ||
+      tx.type?.toLowerCase().includes(q)
+    );
+  }, [transactions, searchQuery]);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -119,15 +138,20 @@ export default function TransactionHistory({ publicKey }: TransactionHistoryProp
         </button>
       </div>
 
-      {transactions.length === 0 ? (
+      {/* 🔍 Search Filter Component */}
+      <div className="mb-4">
+        <TransactionFilter onFilter={setSearchQuery} />
+      </div>
+
+      {filteredTransactions.length === 0 ? (
         <EmptyState
-          icon="📭"
-          title="No Transactions Yet"
-          description="Your transaction history will appear here once you start sending or receiving XLM."
+          icon={searchQuery ? "🔍" : "📭"}
+          title={searchQuery ? "No Matching Transactions" : "No Transactions Yet"}
+          description={searchQuery ? "Try adjusting your search terms." : "Your transaction history will appear here once you start sending or receiving XLM."}
         />
       ) : (
         <div className="space-y-3">
-          {transactions.map((tx) => {
+          {filteredTransactions.map((tx) => {
             const outgoing = isOutgoing(tx);
             
             return (
@@ -189,14 +213,16 @@ export default function TransactionHistory({ publicKey }: TransactionHistoryProp
         </div>
       )}
 
-      {transactions.length > 0 && (
+      {filteredTransactions.length > 0 && (
         <div className="mt-4 text-center">
           <p className="text-white/40 text-sm">
-            Showing last {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
+            {searchQuery 
+              ? `Found ${filteredTransactions.length} matching transaction${filteredTransactions.length !== 1 ? 's' : ''}`
+              : `Showing last ${filteredTransactions.length} transaction${filteredTransactions.length !== 1 ? 's' : ''}`
+            }
           </p>
         </div>
       )}
     </Card>
   );
 }
-

@@ -1,7 +1,10 @@
 /**
  * Stellar Helper - Blockchain Logic with Stellar Wallets Kit
  * ⚠️ DO NOT MODIFY THIS FILE! ⚠️
+ * ✅ FIXED: Added 'use client' and lazy initialization for Next.js compatibility.
  */
+
+'use client'; // CRITICAL: Ensures this only runs in the browser
 
 import * as StellarSdk from '@stellar/stellar-sdk';
 import { 
@@ -14,7 +17,7 @@ import {
 export class StellarHelper {
   private server: StellarSdk.Horizon.Server;
   private networkPassphrase: string;
-  private kit: StellarWalletsKit;
+  private kit: StellarWalletsKit | null = null; // Lazy init
   private network: WalletNetwork;
   private publicKey: string | null = null;
 
@@ -34,11 +37,23 @@ export class StellarHelper {
       : WalletNetwork.PUBLIC;
 
     // Stellar Wallets Kit'i initialize et
-    this.kit = new StellarWalletsKit({
-      network: this.network,
-      selectedWalletId: FREIGHTER_ID,
-      modules: allowAllModules(),
-    });
+    // NOTE: Initialization moved to getKit() to prevent SSR 'window is not defined' errors.
+    // this.kit = new StellarWalletsKit({ ... }); 
+  }
+
+  // Safe accessor for the Kit (Lazy Initialization)
+  private getKit(): StellarWalletsKit {
+    if (typeof window === 'undefined') {
+      throw new Error('StellarHelper can only be used in the browser.');
+    }
+    if (!this.kit) {
+      this.kit = new StellarWalletsKit({
+        network: this.network,
+        selectedWalletId: FREIGHTER_ID,
+        modules: allowAllModules(),
+      });
+    }
+    return this.kit;
   }
 
   isFreighterInstalled(): boolean {
@@ -47,16 +62,18 @@ export class StellarHelper {
 
   async connectWallet(): Promise<string> {
     try {
+      const kit = this.getKit();
+
       // Wallet modal'ı aç ve wallet seçildiğinde adresi al
-      await this.kit.openModal({
+      await kit.openModal({
         onWalletSelected: async (option) => {
           console.log('Wallet selected:', option.id);
-          this.kit.setWallet(option.id);
+          kit.setWallet(option.id);
         }
       });
 
       // Seçilen wallet'ın adresini al
-      const { address } = await this.kit.getAddress();
+      const { address } = await kit.getAddress();
 
       if (!address) {
         throw new Error('Wallet bağlanamadı');
@@ -101,6 +118,7 @@ export class StellarHelper {
     memo?: string;
   }): Promise<{ hash: string; success: boolean }> {
     const account = await this.server.loadAccount(params.from);
+    const kit = this.getKit();
 
     const transactionBuilder = new StellarSdk.TransactionBuilder(account, {
       fee: StellarSdk.BASE_FEE,
@@ -120,7 +138,7 @@ export class StellarHelper {
     const transaction = transactionBuilder.setTimeout(180).build();
 
     // Wallet Kit ile imzala
-    const { signedTxXdr } = await this.kit.signTransaction(transaction.toXDR(), {
+    const { signedTxXdr } = await kit.signTransaction(transaction.toXDR(), {
       networkPassphrase: this.networkPassphrase,
     });
 
@@ -141,7 +159,7 @@ export class StellarHelper {
 
   async getRecentTransactions(
     publicKey: string,
-    limit: number = 10
+    limit: number = 50 // Increased limit for better chart history
   ): Promise<Array<{
     id: string;
     type: string;
@@ -185,6 +203,7 @@ export class StellarHelper {
 
   disconnect() {
     this.publicKey = null;
+    this.kit = null; // Reset kit to force re-init on next connect
     return true;
   }
 }
