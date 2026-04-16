@@ -21,6 +21,9 @@ export default function WalletConnection({ onConnect, onDisconnect }: WalletConn
   }, []);
 
   const checkExistingConnection = async () => {
+    // SENIOR GUARD: Prevents 'null' errors during Vercel build and runtime lag
+    if (!stellar?.kit) return;
+
     try {
       const { address } = await stellar.kit.getAddress();
       if (address) {
@@ -29,7 +32,8 @@ export default function WalletConnection({ onConnect, onDisconnect }: WalletConn
         onConnect(address);
       }
     } catch (error) {
-      console.log('No existing wallet connection');
+      // Logged as info because no connection is a valid initial state
+      console.log('No existing wallet connection found.');
     }
   };
 
@@ -51,13 +55,15 @@ export default function WalletConnection({ onConnect, onDisconnect }: WalletConn
   };
 
   const handleDisconnect = () => {
-    stellar.disconnect();
+    // Added optional chaining here as well for safety
+    stellar?.disconnect?.();
     setPublicKey('');
     setIsConnected(false);
     onDisconnect();
   };
 
   const handleCopyAddress = async () => {
+    if (!publicKey) return;
     await navigator.clipboard.writeText(publicKey);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
