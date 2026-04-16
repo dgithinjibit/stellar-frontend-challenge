@@ -87,6 +87,18 @@ export class StellarHelper {
     }
   }
 
+  // ✅ PUBLIC METHOD: Get connected wallet public key from kit
+  async getPublicKey(): Promise<string | null> {
+    if (typeof window === 'undefined') return null;
+    try {
+      const kit = this.getKit();
+      const { address } = await kit.getAddress();
+      return address || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   async getBalance(publicKey: string): Promise<{
     xlm: string;
     assets: Array<{ code: string; issuer: string; balance: string }>;
