@@ -1,12 +1,3 @@
-/**
- * Stellar Payment Dashboard - Main Page
- * 
- * This is the main page that brings all components together.
- * All blockchain logic is in lib/stellar-helper.ts (DO NOT MODIFY)
- * 
- * Your job: Make this UI/UX amazing! 🎨
- */
-
 'use client';
 
 import { useState } from 'react';
@@ -31,23 +22,22 @@ export default function Home() {
   };
 
   const handlePaymentSuccess = () => {
-    // Refresh balance and transaction history
     setRefreshKey(prev => prev + 1);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-950">
       {/* Header */}
-      <header className="border-b border-white/10 backdrop-blur-sm bg-black/20">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <header className="border-b border-white/10 backdrop-blur-sm bg-black/30">
+        <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl">
-                ⭐
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">S</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Stellar Dashboard</h1>
-                <p className="text-white/60 text-sm">Testnet Payment Interface</p>
+                <h1 className="text-xl font-bold text-white">Stellar Payment Dashboard</h1>
+                <p className="text-blue-100/70 text-xs">Kenya Testnet Interface</p>
               </div>
             </div>
             
@@ -56,17 +46,17 @@ export default function Home() {
                 href="https://stellar.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-white text-sm transition-colors"
+                className="text-blue-100/70 hover:text-white text-xs transition-colors"
               >
-                About Stellar
+                Stellar Docs
               </a>
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/60 hover:text-white text-sm transition-colors"
+                className="text-blue-100/70 hover:text-white text-xs transition-colors"
               >
-                GitHub
+                Source
               </a>
             </div>
           </div>
@@ -74,35 +64,34 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-6">
         {/* Welcome Banner */}
         {!isConnected && (
-          <div className="mb-8 bg-gradient-to-r from-blue-500/20 to-purple-600/20 border border-blue-500/30 rounded-2xl p-8 text-center">
-            <h2 className="text-3xl font-bold text-white mb-3">
-              Welcome to Stellar Payment Dashboard! 👋
+          <div className="mb-6 bg-gradient-to-r from-blue-500/15 to-purple-600/15 border border-blue-400/25 rounded-xl p-6 text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Welcome to Stellar Payments for Kenya
             </h2>
-            <p className="text-white/70 max-w-2xl mx-auto">
-              Connect your wallet to view your balance, send XLM payments, and track your transaction history.
-              All on Stellar's lightning-fast blockchain.
+            <p className="text-blue-100/80 max-w-2xl mx-auto text-sm">
+              Connect your wallet to send and receive XLM payments. Built for farmers and traders across Kenya with M-Pesa integration and 2G network optimization.
             </p>
           </div>
         )}
 
         {/* Wallet Connection */}
-        <div className="mb-8">
+        <div className="mb-6">
           <WalletConnection onConnect={handleConnect} onDisconnect={handleDisconnect} />
         </div>
 
         {/* Dashboard Content - Only show when connected */}
         {isConnected && publicKey && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Balance Section */}
             <div key={`balance-${refreshKey}`}>
               <BalanceDisplay publicKey={publicKey} />
             </div>
 
-            {/* Two Column Layout for Payment Form and Transaction History */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            {/* Two Column Layout */}
+            <div className="grid lg:grid-cols-2 gap-6">
               {/* Payment Form */}
               <div>
                 <PaymentForm publicKey={publicKey} onSuccess={handlePaymentSuccess} />
@@ -114,90 +103,128 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Info Cards */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-                <div className="text-3xl mb-3">⚡</div>
-                <h3 className="text-white font-semibold mb-2">Lightning Fast</h3>
-                <p className="text-white/60 text-sm">
-                  Transactions settle in 3-5 seconds on Stellar network
+            {/* Feature Cards */}
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+                <div className="text-2xl mb-2 text-blue-400">⚡</div>
+                <h3 className="text-white font-medium mb-1 text-sm">Fast Settlement</h3>
+                <p className="text-blue-100/70 text-xs">
+                  Transactions confirm in 3-5 seconds on Stellar
                 </p>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-                <div className="text-3xl mb-3">💰</div>
-                <h3 className="text-white font-semibold mb-2">Low Fees</h3>
-                <p className="text-white/60 text-sm">
-                  Transaction fees are just 0.00001 XLM (~$0.000001)
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+                <div className="text-2xl mb-2 text-purple-400">💱</div>
+                <h3 className="text-white font-medium mb-1 text-sm">KES Conversion</h3>
+                <p className="text-blue-100/70 text-xs">
+                  Auto-convert M-Pesa amounts to XLM at live rates
                 </p>
               </div>
 
-              <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-                <div className="text-3xl mb-3">🔒</div>
-                <h3 className="text-white font-semibold mb-2">Secure</h3>
-                <p className="text-white/60 text-sm">
-                  Built on proven blockchain technology with wallet encryption
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+                <div className="text-2xl mb-2 text-indigo-400">📱</div>
+                <h3 className="text-white font-medium mb-1 text-sm">2G Optimized</h3>
+                <p className="text-blue-100/70 text-xs">
+                  Lightweight design for low-bandwidth networks
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Getting Started Guide - Only show when not connected */}
+        {/* Getting Started - Only show when not connected */}
         {!isConnected && (
-          <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                1️⃣
+          <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+              <div className="w-8 h-8 bg-blue-500/20 rounded flex items-center justify-center mb-3 text-sm font-bold text-blue-300">
+                1
               </div>
-              <h3 className="text-white font-semibold mb-2">Install a Wallet</h3>
-              <p className="text-white/60 text-sm">
-                Choose any Stellar wallet: Freighter, xBull, Lobstr, Albedo, and more!
+              <h3 className="text-white font-medium mb-1 text-sm">Install Wallet</h3>
+              <p className="text-blue-100/70 text-xs">
+                Use Freighter, xBull, or Lobstr for Stellar testnet
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                2️⃣
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+              <div className="w-8 h-8 bg-purple-500/20 rounded flex items-center justify-center mb-3 text-sm font-bold text-purple-300">
+                2
               </div>
-              <h3 className="text-white font-semibold mb-2">Connect</h3>
-              <p className="text-white/60 text-sm">
-                Click the connect button above and approve the connection request
+              <h3 className="text-white font-medium mb-1 text-sm">Connect</h3>
+              <p className="text-blue-100/70 text-xs">
+                Approve the connection request in your wallet extension
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-              <div className="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                3️⃣
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+              <div className="w-8 h-8 bg-pink-500/20 rounded flex items-center justify-center mb-3 text-sm font-bold text-pink-300">
+                3
               </div>
-              <h3 className="text-white font-semibold mb-2">Get Testnet XLM</h3>
-              <p className="text-white/60 text-sm">
-                Use Friendbot to fund your testnet account with free XLM
+              <h3 className="text-white font-medium mb-1 text-sm">Fund Account</h3>
+              <p className="text-blue-100/70 text-xs">
+                Use Friendbot to get free testnet XLM for testing
               </p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-white/10">
-              <div className="w-10 h-10 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-4 text-2xl">
-                4️⃣
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+              <div className="w-8 h-8 bg-indigo-500/20 rounded flex items-center justify-center mb-3 text-sm font-bold text-indigo-300">
+                4
               </div>
-              <h3 className="text-white font-semibold mb-2">Start Sending</h3>
-              <p className="text-white/60 text-sm">
-                Send XLM payments and track your transactions in real-time
+              <h3 className="text-white font-medium mb-1 text-sm">Send Payments</h3>
+              <p className="text-blue-100/70 text-xs">
+                Transfer XLM to farmers, suppliers, or markets instantly
               </p>
+            </div>
+          </div>
+        )}
+
+        {/* Kenyan Farmer Profiles */}
+        {!isConnected && (
+          <div className="mt-8 bg-gradient-to-r from-blue-800/30 to-purple-800/30 rounded-xl p-6 border border-blue-400/20">
+            <h3 className="text-white font-semibold mb-4 text-sm">Sample Use Cases</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-black/20 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-amber-500/20 rounded-full flex items-center justify-center text-amber-300 font-bold">
+                    J
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">John Mwangi</p>
+                    <p className="text-blue-100/60 text-xs">Nyeri Coffee Farmer</p>
+                  </div>
+                </div>
+                <p className="text-blue-100/70 text-xs">
+                  Receives XLM payments from international buyers. Converts to KES via M-Pesa for local expenses.
+                </p>
+              </div>
+              
+              <div className="bg-black/20 rounded-lg p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center text-green-300 font-bold">
+                    W
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-sm">Wangari Ochieng</p>
+                    <p className="text-blue-100/60 text-xs">Kisumu Maize Trader</p>
+                  </div>
+                </div>
+                <p className="text-blue-100/70 text-xs">
+                  Sends XLM to suppliers for seed purchases. Tracks all transactions in real-time on mobile.
+                </p>
+              </div>
             </div>
           </div>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 mt-16">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="text-center text-white/40 text-sm">
-            <p className="mb-2">
-              Built with ❤️ using Stellar SDK | Running on Testnet
+      <footer className="border-t border-white/10 mt-12">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="text-center text-blue-100/50 text-xs">
+            <p className="mb-1">
+              Built with Stellar SDK | Testnet Environment
             </p>
-            <p className="text-xs">
-              ⚠️ This is a testnet application. Do not use real funds.
+            <p>
+              Warning: This is a testnet application. Do not use real funds.
             </p>
           </div>
         </div>
