@@ -12,6 +12,9 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  /* Gen-Z Plum base: Deep, moody, and high-contrast */
+  background-color: #0f020f; 
+  color: #fdf2ff;
 }
 
 body {
@@ -20,22 +23,58 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* THE DOT GRID MASK */
+  /* This creates the yellow dots and masks them so they fade at the edges */
+  background-image: radial-gradient(#f0e442 1px, transparent 1px);
+  background-size: 30px 30px;  
 }
 
-/* Custom scrollbar */
+/* Scrollbar: Keeping it sleek and "plum" themed */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: #1a051a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
+  background: #5c1a5c; /* Muted Plum */
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: #d846d8; /* Neon Plum Hype */
+}
+
+/* Hype utility for your text/buttons */
+.hype-plum {
+  background: linear-gradient(to right, #f0e442, #d846d8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+/* Custom utilities for the plum theme */
+.plum-gradient {
+  background: linear-gradient(135deg, #5c1a5c 0%, #d846d8 100%);
+}
+
+.plum-glow {
+  box-shadow: 0 0 20px rgba(216, 70, 216, 0.3);
+}
+
+.yellow-accent {
+  color: #f0e442;
+}
+
+.bg-plum-dark {
+  background-color: #1a051a;
+}
+
+.bg-plum-card {
+  background: rgba(26, 5, 26, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(240, 228, 66, 0.1);
 }
