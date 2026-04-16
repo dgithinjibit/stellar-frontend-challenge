@@ -1,5 +1,5 @@
 'use client';
-
+import { ValueType } from 'recharts/types/component/DefaultTooltipContent';
 import { useState, useEffect, useMemo } from 'react';
 import { FaMoon, FaSun, FaQrcode, FaSearch, FaPlus, FaTrash, FaChevronDown, FaChartLine } from 'react-icons/fa';
 import { QRCodeSVG } from 'qrcode.react';
